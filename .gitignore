@@ -1,2 +1,7 @@
 bin
 obj
+*.txt
+*.depend
+*.layout
+
+!labirinto_exemplo.txt
