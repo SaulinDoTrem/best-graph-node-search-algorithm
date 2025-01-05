@@ -151,12 +151,12 @@ void saveMaze() {
 
 // Função para carregar o labirinto de um arquivo
 void loadMaze() {
-    char filename[50];
-    printf("Digite o nome do arquivo para carregar (sem extensao .txt): ");
-    scanf("%49s", filename);
-    strcat(filename, ".txt");
+    //char filename[50];
+    //printf("Digite o nome do arquivo para carregar (sem extensao .txt): ");
+    //scanf("%49s", filename);
+    //strcat(filename, ".txt");
 
-    FILE* file = fopen(filename, "r");
+    FILE* file = fopen("labirinto_exemplo.txt", "r");
     if (!file) {
         printf("Erro ao carregar o labirinto!\n");
         return;
