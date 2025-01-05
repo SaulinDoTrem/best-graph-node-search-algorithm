@@ -3,6 +3,7 @@ obj
 *.txt
 *.depend
 *.layout
+.vscode
 
 !labirinto_exemplo.txt
 Trabalho_grafos.depend
