@@ -2,11 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>  // Para Sleep()
 #include "comparisons.h"
 #include "pathfinding.h"
 
-#define MAX_SIZE 100 // Define o tamanho máximo permitido para o labirinto
+#define MAX_SIZE 100 // Define o tamanho mï¿½ximo permitido para o labirinto
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 600
 
@@ -21,7 +20,7 @@ int** pathOrdenado = NULL;
 int** adjMatrix = NULL;
 Point start = {-1, -1}, end = {-1, -1};
 
-// Função para desenhar o labirinto e o caminho
+// Funï¿½ï¿½o para desenhar o labirinto e o caminho
 void drawMaze(SDL_Renderer *renderer, int animouCaminho, int* visitados) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -30,10 +29,10 @@ void drawMaze(SDL_Renderer *renderer, int animouCaminho, int* visitados) {
             if (maze[i][j] == WALL) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Preto
             } else if (path[i][j] == 1 && animouCaminho) {
-                // Desenha o caminho encontrado em verde, com prioridade sobre os nós visitados
+                // Desenha o caminho encontrado em verde, com prioridade sobre os nï¿½s visitados
                 SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // Verde
             } else if (visitados[i * size + j] > 0 && animouCaminho) {
-                // Desenha os nós visitados em laranja, se não forem parte do caminho
+                // Desenha os nï¿½s visitados em laranja, se nï¿½o forem parte do caminho
                 SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255); // Laranja
             } else if ((i == start.y && j == start.x)) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // Azul
@@ -54,14 +53,14 @@ void drawMaze(SDL_Renderer *renderer, int animouCaminho, int* visitados) {
 void drawVisited(SDL_Renderer *renderer, int* visitados, int numNos) {
     int ordemMaxima = 0;
 
-    // Encontra a ordem máxima de visitação
+    // Encontra a ordem mï¿½xima de visitaï¿½ï¿½o
     for (int i = 0; i < numNos; i++) {
         if (visitados[i] > ordemMaxima) {
             ordemMaxima = visitados[i];
         }
     }
 
-    // Desenha os nós na ordem em que foram visitados
+    // Desenha os nï¿½s na ordem em que foram visitados
     for (int ordem = 1; ordem <= ordemMaxima; ordem++) {
         for (int i = 0; i < numNos; i++) {
             if (visitados[i] == ordem) {
@@ -74,7 +73,7 @@ void drawVisited(SDL_Renderer *renderer, int* visitados, int numNos) {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
                 SDL_RenderDrawRect(renderer, &rect);
                 SDL_RenderPresent(renderer); // Atualiza a tela
-                SDL_Delay(50);  // Pausa para a animação
+                SDL_Delay(50);  // Pausa para a animaï¿½ï¿½o
             }
         }
     }
@@ -121,12 +120,12 @@ void freeMatrix(int** matrix, int size) {
     free(matrix);
 }
 
-// Função para salvar o labirinto em um arquivo
+// Funï¿½ï¿½o para salvar o labirinto em um arquivo
 void saveMaze() {
     char filename[50];
     printf("Digite o nome do arquivo para salvar (sem extensao .txt): ");
-    scanf("%49s", filename); // Lê o nome do arquivo do usuário
-    strcat(filename, ".txt"); // Adiciona a extensão .txt
+    scanf("%49s", filename); // Lï¿½ o nome do arquivo do usuï¿½rio
+    strcat(filename, ".txt"); // Adiciona a extensï¿½o .txt
 
     FILE* file = fopen(filename, "w");
     if (!file) {
@@ -149,14 +148,14 @@ void saveMaze() {
     printf("Labirinto salvo com sucesso como %s!\n", filename);
 }
 
-// Função para carregar o labirinto de um arquivo
+// Funï¿½ï¿½o para carregar o labirinto de um arquivo
 void loadMaze() {
-    //char filename[50];
-    //printf("Digite o nome do arquivo para carregar (sem extensao .txt): ");
-    //scanf("%49s", filename);
-    //strcat(filename, ".txt");
+    char filename[50];
+    printf("Digite o nome do arquivo para carregar (sem extensao .txt): ");
+    scanf("%49s", filename);
+    strcat(filename, ".txt");
 
-    FILE* file = fopen("labirinto_exemplo.txt", "r");
+    FILE* file = fopen(filename, "r");
     if (!file) {
         printf("Erro ao carregar o labirinto!\n");
         return;
@@ -166,7 +165,7 @@ void loadMaze() {
     // Leia o tamanho do labirinto do arquivo
     fscanf(file, "%d", &size);
 
-    // Liberar a memória das matrizes atuais, se necessário
+    // Liberar a memï¿½ria das matrizes atuais, se necessï¿½rio
     if (maze != NULL) {
         freeMatrix(maze, old_size);
         freeMatrix(path, old_size);
@@ -211,7 +210,7 @@ void liberarCaminho(Noh* caminho) {
 }
 
 
-// Função para resetar o labirinto
+// Funï¿½ï¿½o para resetar o labirinto
 void resetMaze() {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -225,7 +224,7 @@ void resetMaze() {
 
 }
 
-// Função para resetar o caminho animado
+// Funï¿½ï¿½o para resetar o caminho animado
 void resetCaminhoAnimado() {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -236,19 +235,19 @@ void resetCaminhoAnimado() {
 }
 
 
-// Função que converte o labirinto para uma matriz de adjacências
+// Funï¿½ï¿½o que converte o labirinto para uma matriz de adjacï¿½ncias
 void mazeToAdjMatrix(int** maze, int** adjMatrix) {
-    // Zera a matriz de adjacências
+    // Zera a matriz de adjacï¿½ncias
     for (int i = 0; i < size * size; i++) {
         for (int j = 0; j < size * size; j++) {
             adjMatrix[i][j] = 0;
         }
     }
 
-    // Preenche a matriz de adjacências com base nas conexões possíveis no labirinto
+    // Preenche a matriz de adjacï¿½ncias com base nas conexï¿½es possï¿½veis no labirinto
     for (int y = 0; y < size; y++) {
         for (int x = 0; x < size; x++) {
-            if (maze[y][x] != WALL) { // Não conecta paredes
+            if (maze[y][x] != WALL) { // Nï¿½o conecta paredes
                 int node = y * size + x;
                 if (x + 1 < size && maze[y][x + 1] != WALL) {
                     adjMatrix[node][node + 1] = 1;
@@ -265,31 +264,31 @@ void mazeToAdjMatrix(int** maze, int** adjMatrix) {
 
 
 
-// Função para inverter uma lista encadeada
+// Funï¿½ï¿½o para inverter uma lista encadeada
 Noh* inverterLista(Noh* cabeca) {
     Noh* anterior = NULL;
     Noh* atual = cabeca;
     Noh* proximo = NULL;
 
     while (atual != NULL) {
-        proximo = atual->proximo; // Salva o próximo nó
+        proximo = atual->proximo; // Salva o prï¿½ximo nï¿½
         atual->proximo = anterior; // Inverte o ponteiro
         anterior = atual; // Move o anterior para frente
         atual = proximo; // Move o atual para frente
     }
 
-    return anterior; // Novo cabeça da lista invertida
+    return anterior; // Novo cabeï¿½a da lista invertida
 }
 
 int estaInvertido(Noh* cabeca, int pontoDePartida) {
     if (cabeca == NULL) {
-        return 0; // Lista vazia, não está invertida
+        return 0; // Lista vazia, nï¿½o estï¿½ invertida
     }
-    return cabeca->valor != pontoDePartida; // Retorna 1 se estiver invertida, 0 se não estiver
+    return cabeca->valor != pontoDePartida; // Retorna 1 se estiver invertida, 0 se nï¿½o estiver
 }
 
 int main(int argc, char* argv[]) {
-    CELL_SIZE = WINDOW_WIDTH / size; // Tamanho de cada célula
+    CELL_SIZE = WINDOW_WIDTH / size; // Tamanho de cada cï¿½lula
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* window = SDL_CreateWindow("Labirinto", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
@@ -300,7 +299,7 @@ int main(int argc, char* argv[]) {
     pathOrdenado = createMatrix(size);
     adjMatrix = createMatrix(size * size);
 
-    int* visitados = malloc(size * size * sizeof(int));  // Aloca o vetor de nós visitados
+    int* visitados = malloc(size * size * sizeof(int));  // Aloca o vetor de nï¿½s visitados
 
     int running = 1;
     SDL_Event e;
@@ -310,8 +309,8 @@ int main(int argc, char* argv[]) {
 
     resetMaze();
 
-    printf("Instruções:\n");
-    printf("- Clique esquerdo para adicionar/remover obstáculos.\n");
+    printf("Instruï¿½ï¿½es:\n");
+    printf("- Clique esquerdo para adicionar/remover obstï¿½culos.\n");
     printf("- Clique direito para definir o ponto de partida e destino.\n");
     printf("- Pressione 'e' para executar o algoritmo de busca.\n");
     printf("- Pressione 'n' para resetar o mapa.\n");
@@ -350,7 +349,7 @@ int main(int argc, char* argv[]) {
             } else if (e.type == SDL_KEYDOWN) {
                 resetCaminhoAnimado();
                 int numNos = size * size;
-                // Zera o vetor de nós visitados
+                // Zera o vetor de nï¿½s visitados
                 for (int i = 0; i < numNos; i++) {
                     visitados[i] = 0;
                 }
@@ -367,7 +366,7 @@ int main(int argc, char* argv[]) {
                     mazeToAdjMatrix(maze, adjMatrix);
 //                    int numNos = size * size;
 
-                    // Zera o vetor de nós visitados
+                    // Zera o vetor de nï¿½s visitados
                     for (int i = 0; i < numNos; i++) {
                         visitados[i] = 0;
                     }
@@ -380,12 +379,12 @@ int main(int argc, char* argv[]) {
 
                     // Executa o algoritmo de busca de caminho
                     if (findPath(adjMatrix, numNos, startIndex, endIndex, &caminho, visitados)) {
-                        // Verifica se a lista está invertida
+                        // Verifica se a lista estï¿½ invertida
                         if (estaInvertido(caminho, endIndex)) {
                             caminho = inverterLista(caminho);
                         }
 
-                        // Desenha os nós visitados na ordem correta
+                        // Desenha os nï¿½s visitados na ordem correta
                         drawVisited(renderer, visitados, numNos);
 
                         // Percorre a lista encadeada e preenche a matriz path
@@ -399,11 +398,11 @@ int main(int argc, char* argv[]) {
                             atual = atual->proximo;
                         }
                         int totalComparisons = getComparisons();
-                        printf("Caminho encontrado com %d passos e %d comparações.\n", steps, totalComparisons);
+                        printf("Caminho encontrado com %d passos e %d comparaï¿½ï¿½es.\n", steps, totalComparisons);
                         // Desenha o caminho final
                         drawPath(renderer, steps);
 
-                        // Marca que a animação foi concluída
+                        // Marca que a animaï¿½ï¿½o foi concluï¿½da
                         animouCaminho = 1;
 
                         // Desenha o estado final do labirinto com o caminho preservado
@@ -413,18 +412,18 @@ int main(int argc, char* argv[]) {
 
                         mazeSolved = 1;
                     } else {
-                        printf("Caminho não encontrado.\n");
+                        printf("Caminho nï¿½o encontrado.\n");
                     }
                 } else if (e.key.keysym.sym == SDLK_n) {
-                    // Pedir ao usuário para digitar o novo tamanho do labirinto
+                    // Pedir ao usuï¿½rio para digitar o novo tamanho do labirinto
                     printf("Digite o novo tamanho do labirinto: ");
                     int novoSize;
                     scanf("%d", &novoSize);
 
                     // Validar o novo tamanho (opcional, mas recomendado)
                     if (novoSize <= 0 || novoSize > MAX_SIZE) {
-                        printf("Tamanho inválido! Por favor, escolha um tamanho entre 1 e %d.\n", MAX_SIZE);
-                        continue; // Volta ao loop principal sem fazer alterações
+                        printf("Tamanho invï¿½lido! Por favor, escolha um tamanho entre 1 e %d.\n", MAX_SIZE);
+                        continue; // Volta ao loop principal sem fazer alteraï¿½ï¿½es
                     }
 
                     // Liberar as matrizes antigas
@@ -443,9 +442,9 @@ int main(int argc, char* argv[]) {
                     path = createMatrix(size);
                     pathOrdenado = createMatrix(size);
                     adjMatrix = createMatrix(size * size);
-                    visitados = malloc(size * size * sizeof(int));  // Realoca o vetor de nós visitados
+                    visitados = malloc(size * size * sizeof(int));  // Realoca o vetor de nï¿½s visitados
 
-                    // Resetar o labirinto e outras variáveis
+                    // Resetar o labirinto e outras variï¿½veis
                     resetMaze();
                     steps = 0;
                     mazeSolved = 0;
@@ -465,7 +464,7 @@ int main(int argc, char* argv[]) {
         SDL_RenderPresent(renderer);
     }
 
-    // Libera a memória alocada
+    // Libera a memï¿½ria alocada
     free(visitados);
     freeMatrix(maze, size);
     freeMatrix(path, size);
