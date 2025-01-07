@@ -44,10 +44,11 @@ int heuristica(int noAtual, int fim, int largura) {
     return abs(xAtual - xFim) + abs(yAtual - yFim);
 }
 
-int findPathAStar(int** adjMatrix, int numNos, int inicio, int fim, Noh** caminho, int* visitados, int largura) {
+int findPathAStar(int** adjMatrix, int numNos, int inicio, int fim, Noh** caminho, int* visitados) {
     int* distancias = (int*)malloc(numNos * sizeof(int));
     int* predecessores = (int*)malloc(numNos * sizeof(int));
     int* estimativas = (int*)malloc(numNos * sizeof(int));
+    int largura = 20;
 
     // Inicializa��o
     for (int i = 0; ehMenor(i, numNos); i++) {
@@ -114,7 +115,7 @@ int findPathDijkstra(int **adjMatrix, int numNos, int inicio, int fim, Noh **cam
     int *predecessores = (int *)malloc(numNos * sizeof(int)); // s(z): predecessores
     int *visitacao = (int *)calloc(numNos, sizeof(int));      // Ordem de visitação dos nós
 
-    for (int i = 0; i < numNos; i++)
+    for (int i = 0; ehMenor(i, numNos); i++)
     {
         d[i] = INT_MAX;
         predecessores[i] = -1;
@@ -129,16 +130,16 @@ int findPathDijkstra(int **adjMatrix, int numNos, int inicio, int fim, Noh **cam
         int menorDistancia = INT_MAX;
         int atual = -1;
 
-        for (int i = 0; i < numNos; i++)
+        for (int i = 0; ehMenor(i, numNos); i++)
         {
-            if (!visitados[i] && d[i] < menorDistancia)
+            if (ehIgual(visitados[i], 0) && ehMenor(d[i], menorDistancia))
             {
                 menorDistancia = d[i];
                 atual = i;
             }
         }
 
-        if (atual == -1 || atual == fim)
+        if (ehIgual(atual, -1) || ehIgual(atual, fim))
         {
             break;
         }
@@ -146,12 +147,12 @@ int findPathDijkstra(int **adjMatrix, int numNos, int inicio, int fim, Noh **cam
         visitados[atual] = 1;
         visitacao[atual] = ++(*contadorVisitacao);
 
-        for (int vizinho = 0; vizinho < numNos; vizinho++)
+        for (int vizinho = 0; ehMenor(vizinho, numNos); vizinho++)
         {
-            if (adjMatrix[atual][vizinho] > 0 && !visitados[vizinho])
+            if (ehMaior(adjMatrix[atual][vizinho], 0) && ehIgual(visitados[vizinho], 0))
             {
                 int novaDistancia = d[atual] + adjMatrix[atual][vizinho];
-                if (novaDistancia < d[vizinho])
+                if (ehMenor(novaDistancia, d[vizinho]))
                 {
                     d[vizinho] = novaDistancia;
                     predecessores[vizinho] = atual;
@@ -161,7 +162,7 @@ int findPathDijkstra(int **adjMatrix, int numNos, int inicio, int fim, Noh **cam
     }
 
     int noAtual = fim;
-    while (noAtual != -1)
+    while (ehDiferente(noAtual, -1))
     {
         adicionarNoh(caminho, noAtual);
         noAtual = predecessores[noAtual];
@@ -173,18 +174,16 @@ int findPathDijkstra(int **adjMatrix, int numNos, int inicio, int fim, Noh **cam
     free(predecessores);
     free(visitacao);
 
-    return distanciaFinal == INT_MAX ? -1 : distanciaFinal;
+    return ehIgual(distanciaFinal, INT_MAX) ? 0 : 1;
 }
 
 int findPath(int **adjMatrix, int numNos, int inicio, int fim, Noh **caminho, int *visitados)
 {
-    int contadorVisitacao = 0;
-
     for (int i = 0; ehMenor(i, numNos); i++)
     {
         visitados[i] = 0;
     }
 
-    return findPathDijkstra(adjMatrix, numNos, inicio, fim, caminho, visitados, &contadorVisitacao);
+    return findPathAStar(adjMatrix, numNos, inicio, fim, caminho, visitados);
 }
 

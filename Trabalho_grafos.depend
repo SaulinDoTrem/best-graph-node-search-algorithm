@@ -10,12 +10,11 @@
 
 1732991280 c:\users\saulo\documents\cefet\faculdade\4º período\grafos\trabalho\trabalho_grafos\linked_list.h
 
-1732992229 source:c:\users\saulo\documents\cefet\faculdade\4º período\grafos\trabalho\trabalho_grafos\main.c
+1736201873 source:c:\users\saulo\documents\cefet\faculdade\4º período\grafos\trabalho\trabalho_grafos\main.c
 	<SDL2/SDL.h>
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
-	<windows.h>
 	"comparisons.h"
 	"pathfinding.h"
 
@@ -417,7 +416,7 @@
 	"SDL2/SDL.h"
 	"linked_list.h"
 
-1736099106 source:c:\users\saulo\documents\cefet\faculdade\4º período\grafos\trabalho\trabalho_grafos\pathfinding.c
+1736213373 source:c:\users\saulo\documents\cefet\faculdade\4º período\grafos\trabalho\trabalho_grafos\pathfinding.c
 	"pathfinding.h"
 	"comparisons.h"
 	<stdio.h>
